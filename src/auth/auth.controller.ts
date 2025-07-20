@@ -1,8 +1,10 @@
 
 
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, Param, Post, Query } from '@nestjs/common';
 import { SignupService } from './services/SignUp.service';
 import { SigninService } from './services/SignIn.service';
+import SigninDTO from './dtos/SignIn.dto';
+import SignUpDTO from './dtos/SignUp.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -12,13 +14,13 @@ export class AuthController {
   ) {}
 
   @Post('signup')
-  signup(@Body() body: any) {
+  signup(@Body() body: SignUpDTO) {
     return this.signupService.handle(body);
   }
 
-  @Get('signin')
+  @Post('signin')
   signin(
-    @Body() body: any,
+    @Body() body: SigninDTO,
     @Param() params: string[],
     @Query() query: any,
   ) {
