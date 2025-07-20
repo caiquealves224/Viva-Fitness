@@ -5,7 +5,9 @@ import {
   IsEmail,
   IsEnum,
   IsDateString, 
-  IsNumber
+  IsNumber,
+  Min,
+  Max
 } from "class-validator";
 
 enum GoalTypes {
@@ -14,13 +16,7 @@ enum GoalTypes {
   GAIN = 'gain',
 }
 
-enum activityLevels {
-  SEDENTARY = '1',
-  LIGHT = '2',
-  MODERATE = '3',
-  ACTIVE = '4',
-  VERY_ACTIVE = '5',
-}
+const activityLevels = ['sedentary', 'light', 'moderate', 'active', 'very active'];
 
 export default class SignUpDTO {
   @IsString()
@@ -46,15 +42,13 @@ export default class SignUpDTO {
   birthDate: string;
 
   @IsNumber()
-  @MinLength(1)
-  @MaxLength(3)
   height: number; // in cm
   
   @IsNumber()
-  @MinLength(1)
-  @MaxLength(3)
   weight: number; // in kg
 
-  @IsEnum(activityLevels)
-  activityLevel: activityLevels;
+  @IsNumber()
+  @Min(1)
+  @Max(5)
+  activityLevel: typeof activityLevels[number];
 }
