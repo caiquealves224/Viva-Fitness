@@ -4,6 +4,9 @@ import { Injectable } from '@nestjs/common';
 export class SignupService {
   handle(body: any) {
     // Lógica de cadastro
-    return 'Usuário cadastrado pelo SignupService';
+    return {
+      statusCode: 200,
+      accessToken: 'token_de_acesso',
+    };
   }
 }

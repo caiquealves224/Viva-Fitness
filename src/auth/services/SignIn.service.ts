@@ -4,6 +4,9 @@ import { Injectable } from '@nestjs/common';
 export class SigninService {
   handle(body: any) {
     // Lógica de login
-    return 'Usuário autenticado';
+    return {
+      statusCode: 200,
+      accessToken: 'token_de_acesso',
+    };
   }
 }
