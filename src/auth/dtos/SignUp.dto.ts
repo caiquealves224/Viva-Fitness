@@ -16,7 +16,7 @@ enum GoalTypes {
   GAIN = 'gain',
 }
 
-const activityLevels = ['sedentary', 'light', 'moderate', 'active', 'very active'];
+export const activityLevels = ['sedentary', 'light', 'moderate', 'active', 'very active'];
 
 export default class SignUpDTO {
   @IsString()
