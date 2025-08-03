@@ -1,5 +1,3 @@
-
-
 import { Body, Controller, Param, Post, Query } from '@nestjs/common';
 import { SignupService } from './services/SignUp.service';
 import { SigninService } from './services/SignIn.service';
@@ -24,6 +22,6 @@ export class AuthController {
     @Param() params: string[],
     @Query() query: any,
   ) {
-    return this.signinService.handle({body, params, query});
+    return this.signinService.handle({ body, params, query });
   }
 }
