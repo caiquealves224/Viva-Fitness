@@ -1,8 +1,9 @@
 
-import { Inject, Injectable } from '@nestjs/common';
+import { ConflictException, Inject, Injectable } from '@nestjs/common';
 import SignUpDTO from '../dtos/SignUp.dto';
 import { LibSQLDatabase } from 'drizzle-orm/libsql';
 import * as schema from 'src/db/schema';
+import { eq } from 'drizzle-orm';
 
 @Injectable()
 export class SignupService {
@@ -10,7 +11,16 @@ export class SignupService {
     @Inject('database') private db: LibSQLDatabase<typeof schema>,
     @Inject('USERS_TABLE') private usersTable: schema.UsersTableType,
   ) {}
-  handle(body: SignUpDTO) {
+  public async handle(body: SignUpDTO) {
+    const user = await this.db.query.usersTable.findFirst({
+      columns: { email: true },
+      where: eq(this.usersTable.email, body.email),
+    })
+
+    if (user) {
+      throw new ConflictException('Email already exists');
+    }
+
     // Lógica de cadastro
     this.db.insert(this.usersTable).values({
       email: body.email,
@@ -18,10 +28,10 @@ export class SignupService {
       password: body.password,
       activityLevel: body.activityLevel,
       birthDate: body.birthDate,
-      calories: null,
-      protein: null,
-      carbohydrate: null,
-      fats: null,
+      calories: 0,
+      protein: 0,
+      carbohydrate: 0,
+      fats: 0,
       height: body.height,
       weight: body.weight,
       goal: body.goal,
