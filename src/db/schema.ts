@@ -1,3 +1,4 @@
+import { InferSelectModel, InferInsertModel } from "drizzle-orm";
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
 export const usersTable = sqliteTable("users", {
@@ -24,3 +25,9 @@ export const usersTable = sqliteTable("users", {
   updatedAt: text("updated_at").default(new Date().toISOString()),
   deletedAt: text("deleted_at").default(""),
 });
+
+export type UsersTableType = typeof usersTable;
+
+// Inferindo o tipo da tabela
+export type User = InferSelectModel<typeof usersTable>; // Para SELECTs
+export type NewUser = InferInsertModel<typeof usersTable>; // Para INSERTs
