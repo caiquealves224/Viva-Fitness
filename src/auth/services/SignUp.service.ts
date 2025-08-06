@@ -12,17 +12,17 @@ export class SignupService {
     @Inject('USERS_TABLE') private usersTable: schema.UsersTableType,
   ) {}
   public async handle(body: SignUpDTO) {
-    const user = await this.db.query.usersTable.findFirst({
+    const alreadyUser = await this.db.query.usersTable.findFirst({
       columns: { email: true },
       where: eq(this.usersTable.email, body.email),
     })
 
-    if (user) {
+    if (alreadyUser) {
       throw new ConflictException('Email already exists');
     }
 
     // Lógica de cadastro
-    this.db.insert(this.usersTable).values({
+    const [user] = await this.db.insert(this.usersTable).values({
       email: body.email,
       name: body.name,
       password: body.password,
@@ -36,10 +36,11 @@ export class SignupService {
       weight: body.weight,
       goal: body.goal,
       gender: body.gender,
-    });
+    }).returning({ id: this.usersTable.id });
 
     return {
       statusCode: 200,
+      userId: user.id,
       accessToken: 'token_de_acesso',
     };
   }
